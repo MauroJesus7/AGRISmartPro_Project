@@ -35,7 +35,7 @@ namespace AGRISmartPro.Controllers
         }
 
         // GET: Teams/Create
-        public ActionResult Create()
+        public ActionResult Create() 
         {
             return View();
         }
