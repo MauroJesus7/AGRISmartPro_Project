@@ -1,0 +1,39 @@
+﻿@model IEnumerable<AGRISmartPro.Models.Disease>
+
+@{
+    ViewBag.Title = "Diseases List";
+}
+
+<h2>Diseases List</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayName("Disease")            
+        </th>
+        <th>
+            @Html.DisplayName("Crop")
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)           
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Crop.Name)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.DiseaseId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.DiseaseId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.DiseaseId })
+        </td>
+    </tr>
+}
+
+</table>

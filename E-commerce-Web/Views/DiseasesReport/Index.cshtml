@@ -1,0 +1,75 @@
+﻿@model IEnumerable<AGRISmartPro.Models.DiseaseReport>
+
+@{
+    ViewBag.Title = "Reports";
+}
+
+<h2>Diseases Report</h2>
+
+<p style="float: right">
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary" })
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayName("Disease")
+        </th>
+        <th>
+            @Html.DisplayName("Crop")
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Code)
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.Phone)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Address)
+        </th>*@
+        <th>
+            @Html.DisplayNameFor(model => model.Photo)
+        </th>
+        <th>
+            @Html.DisplayName("Created By")
+        </th>
+        <th>Actions</th>
+    </tr>
+
+@foreach (var item in Model) {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Diseases.Name)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Crops.Name)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Code)
+    </td>
+
+    @*<td>
+            @Html.DisplayFor(modelItem => item.Phone)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Address)
+        </td>*@
+    <td>
+        @if (!string.IsNullOrEmpty(item.Photo))
+        {
+            <img src="@Url.Content(item.Photo)" alt="Image" style="
+                                                                width: 15%;
+                                                                height: auto;" />
+        }
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.User.UserName)
+    </td>
+    <td style="width:250px;">
+        @Html.ActionLink("Edit", "Edit", new { id = item.Dis_ReportId }, new { @class = "btn btn-default" })
+        @Html.ActionLink("Details", "Details", new { id = item.Dis_ReportId }, new { @class = "btn btn-info" })
+        @Html.ActionLink("Delete", "Delete", new { id = item.Dis_ReportId }, new { @class = "btn btn-danger" })
+    </td>
+</tr>
+}
+
+</table>
