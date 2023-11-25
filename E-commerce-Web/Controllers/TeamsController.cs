@@ -1,6 +1,7 @@
 ﻿using AGRISmartPro.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -42,10 +43,11 @@ namespace AGRISmartPro.Controllers
 
         // POST: Teams/Create
         [HttpPost]
-        public ActionResult Create([Bind(Include = "TeamId, Name, Description, CreatedBy")] Team team)
+        public ActionResult Create([Bind(Include = "TeamId, Name, Description, Created_By")] Team team)
         {
             if (ModelState.IsValid)
             {
+                //team.Created_At = DateTime.Now;
                 db.Teams.Add(team);
                 try
                 {
@@ -74,25 +76,50 @@ namespace AGRISmartPro.Controllers
         }
 
         // GET: Teams/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Team team = db.Teams.Find(id);
+            if (team == null)
+            {
+                return HttpNotFound();
+            }
+            return View(team);
         }
 
         // POST: Teams/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit([Bind(Include = "TeamId, Name, Description, Created_By")] Team team)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add update logic here
+                //team.Updated_At = DateTime.Now;
+                db.Entry(team).State = EntityState.Modified;
+                try
+                {
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
 
-                return RedirectToAction("Index");
+                    if (ex.InnerException != null &&
+                        ex.InnerException.InnerException != null
+                        && ex.InnerException.InnerException.Message.Contains("_Index"))
+                        {
+                            ModelState.AddModelError(string.Empty, "Cannot save! Duplicated Name...");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.Message);
+                    }
+                        return View(team);
+                }
             }
-            catch
-            {
-                return View();
-            }
+            return View(team);
         }
 
         // GET: Teams/Delete/5
